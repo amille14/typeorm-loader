@@ -108,12 +108,17 @@ export function select(model: Function | string, selection: Selection | null,
     const relations = meta.relations;
     relations.forEach(relation => {
       if (relation.propertyName in selection.children!) {
-        const target = connection.getRepository(relation.target).target;
-        const name = typeof target == 'string' ? target : target.name;
-        const childAlias = alias + '_' + name;
+
+        // MONKEYPATCHED: See https://github.com/Webtomizer/typeorm-loader/issues/5
+
+        // const target = connection.getRepository(relation.target).target;
+        // const name = typeof target == 'string' ? target : target.name;
+        // const childAlias = alias + '_' + name;
+        const childAlias = alias + '_' + relation.name
+
         if (relation.inverseRelation) {
-          qb = qb.addFrom(relation.inverseRelation.entityMetadata.targetName,
-            relation.inverseRelation.entityMetadata.targetName);
+          // qb = qb.addFrom(relation.inverseRelation.entityMetadata.targetName,
+          //   relation.inverseRelation.entityMetadata.targetName);
           qb = qb.leftJoin(alias + '.' + relation.propertyName, childAlias);
           qb = select(relation.inverseEntityMetadata.target,
             selection.children![relation.propertyName], connection, qb, childAlias);
