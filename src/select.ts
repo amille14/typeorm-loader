@@ -114,7 +114,7 @@ export function select(model: Function | string, selection: Selection | null,
         // const target = connection.getRepository(relation.target).target;
         // const name = typeof target == 'string' ? target : target.name;
         // const childAlias = alias + '_' + name;
-        const childAlias = alias + '_' + relation.name
+        const childAlias = alias + '_' + relation.propertyName
 
         if (relation.inverseRelation) {
           // qb = qb.addFrom(relation.inverseRelation.entityMetadata.targetName,
